@@ -228,6 +228,7 @@ dependencies = [
  "bevy_egui",
  "egui_dock",
  "image",
+ "log",
  "thiserror",
  "winit",
 ]
