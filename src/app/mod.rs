@@ -1,45 +1,28 @@
-use bevy::log::LogPlugin;
 use bevy::prelude::*;
-use bevy_egui::EguiPlugin;
+use bevy_egui::{EguiPlugin, EguiSet};
 
-use self::{error::print_error, ui::app::MyApp};
+use self::state::UiState;
 
-mod error;
-mod events;
+mod camera;
+mod setup;
+mod state;
+mod tab_viewer;
+mod types;
 mod ui;
-mod window;
 
 pub fn run() {
-    let mut app = App::new();
-    // Register resources
-    app.init_resource::<window::Settings>()
-        .init_resource::<MyApp>();
-
-    // Register plugins
-    #[cfg(debug_assertions)]
-    app.add_plugins(DefaultPlugins.set(LogPlugin {
-        level: bevy::log::Level::DEBUG,
-        filter: "info,archipel_client=trace,wgpu_core=warn,wgpu_hal=warn".into(),
-    }));
-
-    #[cfg(not(debug_assertions))]
-    app.add_plugins(DefaultPlugins.set(LogPlugin {
-        level: bevy::log::Level::INFO,
-        filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
-    }));
-
-    app.add_plugins(EguiPlugin);
-
-    // Register startup systems
-    app.add_systems(Startup, window::set_icon.pipe(print_error))
-        .add_systems(Startup, window::set_title)
-        .add_systems(Startup, window::set_size);
-
-    // Register update systems
-    app.add_systems(Update, window::get_size)
-        .add_systems(Update, ui::app::ui_window_system)
-        .add_systems(Update, events::ui_events_system);
-
-    // Run the app
-    app.run()
+    App::new()
+        .add_plugins(DefaultPlugins)
+        .add_plugins(EguiPlugin)
+        .insert_resource(UiState::new())
+        .add_systems(Startup, setup::setup)
+        .add_systems(
+            PostUpdate,
+            ui::show_ui_system
+                .before(EguiSet::ProcessOutput)
+                .before(bevy::transform::TransformSystem::TransformPropagate),
+        )
+        .register_type::<Option<Handle<Image>>>()
+        .register_type::<AlphaMode>()
+        .run();
 }
