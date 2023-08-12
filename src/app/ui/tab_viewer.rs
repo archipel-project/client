@@ -2,7 +2,7 @@ use bevy::prelude::World;
 use bevy_egui::egui;
 use egui_gizmo::GizmoMode;
 
-use super::types::EguiWindow;
+use crate::app::types::EguiWindow;
 
 pub struct TabViewer<'a> {
     pub world: &'a mut World,

@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["egui", "Egui"]
+  "cSpell.words": ["egui", "Egui"],
+  "rust-analyzer.showUnlinkedFileNotification": false
 }

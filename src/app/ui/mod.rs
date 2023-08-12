@@ -5,7 +5,11 @@ use bevy::{
 };
 use bevy_egui::EguiContext;
 
-use super::state::UiState;
+use self::state::UiState;
+
+pub mod gizmo;
+pub mod state;
+mod tab_viewer;
 
 pub fn show_ui_system(world: &mut World) {
     let Ok(egui_context) = world

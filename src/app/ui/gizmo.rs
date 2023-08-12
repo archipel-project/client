@@ -2,7 +2,9 @@ use bevy::{prelude::*, render::camera::CameraProjection};
 use bevy_egui::egui;
 use egui_gizmo::{Gizmo, GizmoMode, GizmoOrientation};
 
-use super::{camera::MainCamera, state::UiState};
+use crate::app::camera::MainCamera;
+
+use super::state::UiState;
 
 pub fn set_gizmo_mode(input: Res<Input<KeyCode>>, mut ui_state: ResMut<UiState>) {
     for (key, mode) in [

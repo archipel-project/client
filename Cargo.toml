@@ -15,3 +15,4 @@ thiserror = "1"
 log = "0"
 egui-gizmo = "0.11"
 anyhow = "1"
+bevy_fly_camera = { git = "https://github.com/zachbateman/bevy_fly_camera", branch = "bevy_0.11.0" }

@@ -1,4 +1,4 @@
-use bevy::{core_pipeline::clear_color::ClearColorConfig, prelude::*};
+use bevy::prelude::*;
 
 use super::camera::MainCamera;
 
@@ -6,7 +6,10 @@ pub fn setup(
     mut commands: Commands,
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    mut cameras_transform: Query<&mut Transform, With<MainCamera>>,
 ) {
+    debug!("Setting up scene");
+
     let box_size = 2.0;
     let box_thickness = 0.15;
     let box_offset = (box_size + box_thickness) / 2.0;
@@ -130,8 +133,13 @@ pub fn setup(
         ..Default::default()
     });
 
-    // camera
-    commands.spawn((
+    // get the camera to update its coordinates
+    debug!("Updating camera transform");
+    let mut cam_pos = cameras_transform.single_mut();
+    *cam_pos = Transform::from_xyz(0.0, box_offset, 4.0)
+        .looking_at(Vec3::new(0.0, box_offset, 0.0), Vec3::Y);
+
+    /*commands.spawn((
         Camera3dBundle {
             transform: Transform::from_xyz(0.0, box_offset, 4.0)
                 .looking_at(Vec3::new(0.0, box_offset, 0.0), Vec3::Y),
@@ -147,5 +155,5 @@ pub fn setup(
         },
         MainCamera,
         // PickRaycastSource,
-    ));
+    ));*/
 }

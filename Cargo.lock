@@ -227,6 +227,7 @@ dependencies = [
  "anyhow",
  "bevy",
  "bevy_egui",
+ "bevy_fly_camera",
  "egui-gizmo",
  "egui_dock",
  "image",
@@ -549,6 +550,14 @@ checksum = "6bdf808dbdc68a0c519e09026c627bda85250205a40ac02794866bff254d6b56"
 dependencies = [
  "bevy_macro_utils",
  "encase_derive_impl",
+]
+
+[[package]]
+name = "bevy_fly_camera"
+version = "0.11.0"
+source = "git+https://github.com/zachbateman/bevy_fly_camera?branch=bevy_0.11.0#1ebb22c5cf4de030156b6813d08c51457a060575"
+dependencies = [
+ "bevy",
 ]
 
 [[package]]

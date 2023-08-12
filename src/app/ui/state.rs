@@ -3,7 +3,9 @@ use bevy_egui::egui;
 use egui_dock::{DockArea, NodeIndex, Style, Tree};
 use egui_gizmo::GizmoMode;
 
-use super::{tab_viewer::TabViewer, types::EguiWindow};
+use crate::app::types::EguiWindow;
+
+use super::tab_viewer::TabViewer;
 
 #[derive(Resource)]
 pub struct UiState {

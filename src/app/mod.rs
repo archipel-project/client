@@ -1,14 +1,15 @@
 use bevy::{log::LogPlugin, prelude::*};
 use bevy_egui::{EguiPlugin, EguiSet};
+use bevy_fly_camera::FlyCameraPlugin;
 
-use self::{state::UiState, ui::show_ui_system, window::WindowSettings};
+use self::{
+    ui::{show_ui_system, state::UiState},
+    window::WindowSettings,
+};
 
 mod camera;
 mod errors;
-mod gizmo;
 mod setup;
-mod state;
-mod tab_viewer;
 mod types;
 mod ui;
 mod window;
@@ -34,28 +35,40 @@ pub fn run() {
         filter: "info,wgpu_core=warn,wgpu_hal=warn".into(),
     }));
     app.add_plugins(EguiPlugin);
+    app.add_plugins(FlyCameraPlugin);
 
     // Register startup systems
-    app.add_systems(PreStartup, window::set_icon.pipe(errors::print_error))
-        .add_systems(PreStartup, window::set_title)
-        .add_systems(PreStartup, window::set_size)
-        .add_systems(Startup, setup::setup);
+    app.add_systems(
+        PreStartup,
+        (
+            window::set_icon.pipe(errors::print_error),
+            window::set_title,
+            window::set_size,
+        ),
+    )
+    .add_systems(PreStartup, camera::setup_camera_fog)
+    .add_systems(Startup, setup::setup);
+
+    // Register pre-update systems
+    app.add_systems(PreUpdate, camera::toggle_motion_system);
 
     // Register update systems
     app.add_systems(Update, window::get_size)
-        .add_systems(Update, gizmo::set_gizmo_mode)
-        .add_systems(Update, ui::exit_on_event)
-        // Register post-update systems
-        .add_systems(
-            PostUpdate,
-            ui::show_ui_system
-                .before(EguiSet::ProcessOutput)
-                .before(bevy::transform::TransformSystem::TransformPropagate),
-        )
-        .add_systems(
-            PostUpdate,
-            camera::set_camera_viewport.after(show_ui_system),
-        );
+        .add_systems(Update, ui::gizmo::set_gizmo_mode)
+        .add_systems(Update, ui::exit_on_event);
+
+    // Register post-update systems
+    app.add_systems(
+        PostUpdate,
+        ui::show_ui_system
+            .before(EguiSet::ProcessOutput)
+            .before(bevy::transform::TransformSystem::TransformPropagate),
+    );
+    // Register post-update systems
+    app.add_systems(
+        PostUpdate,
+        camera::set_camera_viewport.after(show_ui_system),
+    );
 
     app.run();
 }
