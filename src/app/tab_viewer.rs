@@ -1,11 +1,13 @@
-use bevy::prelude::{GlobalTransform, Mat4, Projection, With, World};
+use bevy::prelude::World;
 use bevy_egui::egui;
+use egui_gizmo::GizmoMode;
 
-use super::{camera::MainCamera, types::EguiWindow};
+use super::types::EguiWindow;
 
 pub struct TabViewer<'a> {
     pub world: &'a mut World,
     pub viewport_rect: &'a mut egui::Rect,
+    pub gizmo_mode: GizmoMode,
 }
 
 impl egui_dock::TabViewer for TabViewer<'_> {
@@ -17,9 +19,11 @@ impl egui_dock::TabViewer for TabViewer<'_> {
                 *self.viewport_rect = ui.clip_rect();
 
                 // TODO: Draw game view
+                super::gizmo::draw_gizmo(ui, self.world, self.gizmo_mode);
             }
             EguiWindow::Inspector => {
                 // TODO: Draw inspector
+                ui.heading("Inspector");
             }
             EguiWindow::About => {
                 ui.heading("About");

@@ -1,13 +1,15 @@
 use bevy::prelude::*;
 use bevy_egui::egui;
 use egui_dock::{DockArea, NodeIndex, Style, Tree};
+use egui_gizmo::GizmoMode;
 
 use super::{tab_viewer::TabViewer, types::EguiWindow};
 
 #[derive(Resource)]
 pub struct UiState {
     tree: Tree<EguiWindow>,
-    viewport_rect: egui::Rect,
+    pub viewport_rect: egui::Rect,
+    pub gizmo_mode: GizmoMode,
 }
 
 impl UiState {
@@ -20,6 +22,7 @@ impl UiState {
         Self {
             tree,
             viewport_rect: egui::Rect::NOTHING,
+            gizmo_mode: GizmoMode::Translate,
         }
     }
 
@@ -29,6 +32,7 @@ impl UiState {
         let mut tab_viewer = TabViewer {
             world,
             viewport_rect: &mut self.viewport_rect,
+            gizmo_mode: self.gizmo_mode,
         };
 
         DockArea::new(&mut self.tree)

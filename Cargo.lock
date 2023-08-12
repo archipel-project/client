@@ -224,8 +224,10 @@ dependencies = [
 name = "archipel-client"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "bevy",
  "bevy_egui",
+ "egui-gizmo",
  "egui_dock",
  "image",
  "log",
@@ -1548,6 +1550,16 @@ dependencies = [
  "ahash 0.8.3",
  "epaint",
  "nohash-hasher",
+]
+
+[[package]]
+name = "egui-gizmo"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b62be3408d2b5a3a866931a8b8b3357992c2e93cb72d220f65f663c63ac45f3a"
+dependencies = [
+ "egui",
+ "glam",
 ]
 
 [[package]]
