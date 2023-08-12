@@ -44,6 +44,7 @@ pub fn run() {
     // Register update systems
     app.add_systems(Update, window::get_size)
         .add_systems(Update, gizmo::set_gizmo_mode)
+        .add_systems(Update, ui::exit_on_event)
         // Register post-update systems
         .add_systems(
             PostUpdate,

@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{core_pipeline::clear_color::ClearColorConfig, prelude::*};
 
 use super::camera::MainCamera;
 
@@ -135,6 +135,14 @@ pub fn setup(
         Camera3dBundle {
             transform: Transform::from_xyz(0.0, box_offset, 4.0)
                 .looking_at(Vec3::new(0.0, box_offset, 0.0), Vec3::Y),
+            camera_3d: Camera3d {
+                clear_color: ClearColorConfig::Custom(Color::rgb(
+                    128.0 / 255.0,
+                    172.0 / 255.0,
+                    255.0 / 255.0,
+                )),
+                ..Default::default()
+            },
             ..Default::default()
         },
         MainCamera,

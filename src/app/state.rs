@@ -10,6 +10,8 @@ pub struct UiState {
     tree: Tree<EguiWindow>,
     pub viewport_rect: egui::Rect,
     pub gizmo_mode: GizmoMode,
+
+    pub should_quit: bool,
 }
 
 impl UiState {
@@ -23,6 +25,7 @@ impl UiState {
             tree,
             viewport_rect: egui::Rect::NOTHING,
             gizmo_mode: GizmoMode::Translate,
+            should_quit: false,
         }
     }
 
@@ -38,6 +41,8 @@ impl UiState {
         DockArea::new(&mut self.tree)
             .style(Style::from_egui(ctx.style().as_ref()))
             .show(&ctx, &mut tab_viewer);
+
+        self.render_bottombar_buttons(ctx);
     }
 
     fn render_topbar_buttons(&mut self, ctx: &mut egui::Context) {
@@ -45,11 +50,19 @@ impl UiState {
             ui.horizontal(|ui| {
                 egui::menu::menu_button(ui, "File", |ui| {
                     if ui.button("Quit").clicked() {
-                        std::process::exit(0);
+                        self.should_quit = true;
                     }
                 });
 
                 egui::menu::menu_button(ui, "Help", |ui| if ui.button("About").clicked() {});
+            });
+        });
+    }
+
+    fn render_bottombar_buttons(&mut self, ctx: &mut egui::Context) {
+        egui::TopBottomPanel::bottom("bottom_panel").show(ctx, |ui| {
+            ui.horizontal(|ui| {
+                egui::warn_if_debug_build(ui);
             });
         });
     }
